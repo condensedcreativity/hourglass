@@ -54,9 +54,17 @@ namespace Hourglass.Managers
         /// Gets a list of the currently loaded timers that are not bound to any <see cref="TimerWindow"/> and are not
         /// <see cref="TimerState.Stopped"/>.
         /// </summary>
-        public IList<Timer> ResumableTimers
+        public IList<Timer> BackgroundTimers
         {
-            get { return this.timers.Where(t => t.State != TimerState.Stopped && !IsBoundToWindow(t)).ToList(); }
+            get { return this.timers.Where(t => t.State != TimerState.Stopped && t.State != TimerState.Saved && !IsBoundToWindow(t)).ToList(); }
+        }
+
+        /// <summary>
+        /// Gets a list of the <see cref="TimerState.Saved"/> timers.
+        /// </summary>
+        public IList<Timer> SavedTimers
+        {
+            get { return this.timers.Where(t => t.State == TimerState.Saved).ToList(); }
         }
 
         /// <summary>
@@ -135,11 +143,19 @@ namespace Hourglass.Managers
         }
 
         /// <summary>
-        /// Clears the <see cref="ResumableTimers"/>.
+        /// Clears the <see cref="BackgroundTimers"/>.
         /// </summary>
-        public void ClearResumableTimers()
+        public void ClearBackgroundTimers()
         {
-            this.Remove(this.ResumableTimers);
+            this.Remove(this.BackgroundTimers);
+        }
+
+        /// <summary>
+        /// Clears the <see cref="SavedTimers"/>.
+        /// </summary>
+        public void ClearSavedTimers()
+        {
+            this.Remove(this.SavedTimers);
         }
 
         /// <summary>

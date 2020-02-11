@@ -15,6 +15,7 @@
         <CommandBinding Command="local:TimerWindow.CloseCommand" Executed="CloseCommandExecuted"/>
         <CommandBinding Command="local:TimerWindow.CancelCommand" Executed="CancelCommandExecuted"/>
         <CommandBinding Command="local:TimerWindow.UpdateCommand" Executed="UpdateCommandExecuted"/>
+        <CommandBinding Command="local:TimerWindow.SaveCommand" Executed="SaveCommandExecuted"/>
         <CommandBinding Command="local:TimerWindow.EscapeCommand" Executed="EscapeCommandExecuted"/>
         <CommandBinding Command="local:TimerWindow.FullScreenCommand" Executed="FullScreenCommandExecuted"/>
     </Window.CommandBindings>
@@ -53,6 +54,7 @@
                         <Condition Binding="{Binding ElementName=CloseButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=CancelButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=UpdateButton, Path=IsFocused}" Value="False"/>
+                        <Condition Binding="{Binding ElementName=SaveButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=InnerGrid, Path=IsMouseOver}" Value="False"/>
                         <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=local:TimerWindow}, Path=ContextMenu.IsOpen}" Value="False"/>
                         <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=local:TimerWindow}, Path=Mode}" Value="Status"/>
@@ -97,6 +99,7 @@
                         <Condition Binding="{Binding ElementName=CloseButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=CancelButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=UpdateButton, Path=IsFocused}" Value="False"/>
+                        <Condition Binding="{Binding ElementName=SaveButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=InnerGrid, Path=IsMouseOver}" Value="False"/>
                         <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=local:TimerWindow}, Path=ContextMenu.IsOpen}" Value="False"/>
                         <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=local:TimerWindow}, Path=Timer.State, Converter={StaticResource RegexMatchConverter}, ConverterParameter=^(Running|Expired)$}" Value="True"/>
@@ -172,6 +175,7 @@
                         <Condition Binding="{Binding ElementName=CloseButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=CancelButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=UpdateButton, Path=IsFocused}" Value="False"/>
+                        <Condition Binding="{Binding ElementName=SaveButton, Path=IsFocused}" Value="False"/>
                         <Condition Binding="{Binding ElementName=InnerGrid, Path=IsMouseOver}" Value="False"/>
                         <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=local:TimerWindow}, Path=ContextMenu.IsOpen}" Value="False"/>
                         <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=local:TimerWindow}, Path=Timer.State}" Value="Expired"/>
@@ -247,6 +251,7 @@
                         <Button x:Name="CloseButton" Command="local:TimerWindow.CloseCommand" MouseEnter="ButtonMouseEnter" MouseLeave="ButtonMouseLeave"/>
                         <Button x:Name="CancelButton" Command="local:TimerWindow.CancelCommand" MouseEnter="ButtonMouseEnter" MouseLeave="ButtonMouseLeave"/>
                         <Button x:Name="UpdateButton" Command="local:TimerWindow.UpdateCommand" MouseEnter="ButtonMouseEnter" MouseLeave="ButtonMouseLeave"/>
+                        <Button x:Name="SaveButton" Command="local:TimerWindow.SaveCommand" MouseEnter="ButtonMouseEnter" MouseLeave="ButtonMouseLeave"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>

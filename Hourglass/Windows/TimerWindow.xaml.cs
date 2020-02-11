@@ -90,6 +90,11 @@ namespace Hourglass.Windows
         public static readonly RoutedCommand UpdateCommand = new RoutedCommand();
 
         /// <summary>
+        /// Saves timer.
+        /// </summary>
+        public static readonly RoutedCommand SaveCommand = new RoutedCommand();
+
+        /// <summary>
         /// Exits input mode, enters input mode, or exits full-screen mode depending on the state of the window.
         /// </summary>
         public static readonly RoutedCommand EscapeCommand = new RoutedCommand();
@@ -681,7 +686,8 @@ namespace Hourglass.Windows
                 || this.ResetButton.Unfocus()
                 || this.CloseButton.Unfocus()
                 || this.CancelButton.Unfocus()
-                || this.UpdateButton.Unfocus();
+                || this.UpdateButton.Unfocus()
+                || this.SaveButton.Unfocus();
         }
 
         #endregion
@@ -704,6 +710,7 @@ namespace Hourglass.Windows
             this.CloseButton.Content = Properties.Resources.TimerWindowCloseButtonContent;
             this.CancelButton.Content = Properties.Resources.TimerWindowCancelButtonContent;
             this.UpdateButton.Content = Properties.Resources.TimerWindowUpdateButtonContent;
+            this.SaveButton.Content = Properties.Resources.TimerWindowSaveButtonContent;
         }
 
         #endregion
@@ -817,6 +824,27 @@ namespace Hourglass.Windows
         {
             this.BeginExpirationAnimation();
             this.BeginExpirationSound();
+        }
+        
+        /// <summary>
+        /// Starts the timer that is specified to follow the current timer.
+        /// </summary>
+        /// TODO this should be moved to TimerManager so that the window does not have to be open to execute the next timer
+        private void StartNextTimer(String nextTimerTitle)
+        {
+            foreach (Timer availableTimer in TimerManager.Instance.SavedTimers)
+            {
+                if (nextTimerTitle.Equals(availableTimer.Options.Title))
+                {
+                    TimerWindow window = new TimerWindow();
+                    window.RestoreFromWindow(this);
+                    Timer nextTimer = new Timing.Timer(availableTimer.ToTimerInfo());
+                    TimerManager.Instance.Add(nextTimer);
+                    nextTimer.Start(nextTimer.TimerStart);
+                    window.Show(nextTimer);
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -1022,6 +1050,15 @@ namespace Hourglass.Windows
         /// </summary>
         private void UpdateBoundControls()
         {
+            if (String.IsNullOrWhiteSpace(this.TitleTextBox.Text))
+            {
+                this.SaveButton.IsEnabled = false;
+            }
+            else
+            {
+                this.SaveButton.IsEnabled = true;
+            }
+
             switch (this.Mode)
             {
                 case TimerWindowMode.Input:
@@ -1478,6 +1515,12 @@ namespace Hourglass.Windows
         private void TimerExpired(object sender, EventArgs e)
         {
             this.BeginExpirationAnimationAndSound();
+            Timer expiredTimer = sender as Timer;
+            if (!String.IsNullOrEmpty(expiredTimer.Options.NextTimerTitle))
+            {
+                this.StartNextTimer(expiredTimer.Options.NextTimerTitle);
+            }
+            
         }
 
         /// <summary>
@@ -1673,6 +1716,37 @@ namespace Hourglass.Windows
                 this.SwitchToStatusMode();
                 this.CancelButton.Unfocus();
             }
+        }
+
+        /// <summary>
+        /// Invoked when the <see cref="SaveCommand"/> is executed.
+        /// </summary>
+        /// <param name="sender">The <see cref="TimerWindow"/>.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+            // Make a copy of the current timer
+            Timer savedTimer = new Timer(this.Timer.ToTimerInfo());
+
+            // If the new timer does not have a valid TimerStart value then intialize the TimerStart value based on the UI state
+            if ((savedTimer.TimerStart == null) || (!savedTimer.TimerStart.IsValid))
+            {
+                TimerStart timerStart = TimerStart.FromString(this.TimerTextBox.Text);
+                if (timerStart == null)
+                {
+                    this.BeginValidationErrorAnimation();
+                    return;
+                }
+
+                savedTimer.Start(timerStart);
+                savedTimer.Pause();
+            }
+
+            // Set the copy state to saved, add it to the TimerManager list
+            savedTimer.Save();
+            TimerManager.Instance.Add(savedTimer);
+            this.SaveButton.Unfocus();
         }
 
         /// <summary>

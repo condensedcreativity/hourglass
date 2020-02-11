@@ -77,6 +77,11 @@ namespace Hourglass.Timing
         private string title;
 
         /// <summary>
+        /// A user-specified title for the timer to run after this one.
+        /// </summary>
+        private string nextTimerTitle;
+
+        /// <summary>
         /// A value indicating whether the timer window should always be displayed on top of other windows.
         /// </summary>
         private bool alwaysOnTop;
@@ -169,6 +174,7 @@ namespace Hourglass.Timing
         public TimerOptions()
         {
             this.title = string.Empty;
+            this.nextTimerTitle = string.Empty;
             this.alwaysOnTop = false;
             this.promptOnExit = true;
             this.showProgressInTaskbar = true;
@@ -242,6 +248,28 @@ namespace Hourglass.Timing
 
                 this.title = value;
                 this.OnPropertyChanged("Title");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a user-specified title for the timer to run after this one.
+        /// </summary>
+        public string NextTimerTitle
+        {
+            get
+            {
+                return this.nextTimerTitle;
+            }
+
+            set
+            {
+                if (this.nextTimerTitle == value)
+                {
+                    return;
+                }
+
+                this.nextTimerTitle = value;
+                this.OnPropertyChanged("NextTimerTitle");
             }
         }
 
@@ -641,6 +669,7 @@ namespace Hourglass.Timing
             }
 
             this.title = options.title;
+            this.nextTimerTitle = options.nextTimerTitle;
             this.alwaysOnTop = options.alwaysOnTop;
             this.promptOnExit = options.promptOnExit;
             this.showProgressInTaskbar = options.showProgressInTaskbar;
@@ -660,6 +689,7 @@ namespace Hourglass.Timing
 
             this.OnPropertyChanged(
                 "Title",
+                "NextTimerTitle",
                 "AlwaysOnTop",
                 "PromptOnExit",
                 "ShowProgressInTaskbar",
@@ -690,6 +720,7 @@ namespace Hourglass.Timing
             }
 
             this.title = info.Title;
+            this.nextTimerTitle = info.NextTimerTitle;
             this.alwaysOnTop = info.AlwaysOnTop;
             this.promptOnExit = info.PromptOnExit;
             this.showProgressInTaskbar = info.ShowProgressInTaskbar;
@@ -709,6 +740,7 @@ namespace Hourglass.Timing
 
             this.OnPropertyChanged(
                 "Title",
+                "NextTimerTitle",
                 "AlwaysOnTop",
                 "PromptOnExit",
                 "ShowProgressInTaskbar",
@@ -736,6 +768,7 @@ namespace Hourglass.Timing
             return new TimerOptionsInfo
             {
                 Title = this.title,
+                NextTimerTitle = this.nextTimerTitle,
                 AlwaysOnTop = this.alwaysOnTop,
                 PromptOnExit = this.promptOnExit,
                 ShowProgressInTaskbar = this.showProgressInTaskbar,

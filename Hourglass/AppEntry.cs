@@ -108,9 +108,9 @@ namespace Hourglass
         /// <param name="arguments">Parsed command-line arguments.</param>
         private static void ShowTimerWindowsForArguments(CommandLineArguments arguments)
         {
-            if (arguments.OpenSavedTimers && TimerManager.Instance.ResumableTimers.Any())
+            if (arguments.OpenBackgroundTimers && TimerManager.Instance.BackgroundTimers.Any())
             {
-                ShowSavedTimerWindows(arguments);
+                ShowBackgroundTimerWindows(arguments);
 
                 if (arguments.TimerStart != null)
                 {
@@ -142,25 +142,25 @@ namespace Hourglass
         }
 
         /// <summary>
-        /// Shows windows for all saved timers.
+        /// Shows windows for all background timers.
         /// </summary>
         /// <param name="arguments">Parsed command-line arguments.</param>
-        private static void ShowSavedTimerWindows(CommandLineArguments arguments)
+        private static void ShowBackgroundTimerWindows(CommandLineArguments arguments)
         {
-            foreach (Timer savedTimer in TimerManager.Instance.ResumableTimers)
+            foreach (Timer timer in TimerManager.Instance.BackgroundTimers)
             {
                 TimerWindow window = new TimerWindow();
 
-                if (savedTimer.Options.WindowSize != null)
+                if (timer.Options.WindowSize != null)
                 {
-                    window.Restore(savedTimer.Options.WindowSize, RestoreOptions.AllowMinimized);
+                    window.Restore(timer.Options.WindowSize, RestoreOptions.AllowMinimized);
                 }
                 else
                 {
                     window.Restore(arguments.GetWindowSize(), RestoreOptions.AllowMinimized);
                 }
 
-                window.Show(savedTimer);
+                window.Show(timer);
             }
         }
 
@@ -171,7 +171,7 @@ namespace Hourglass
         private static void SetGlobalSettingsFromArguments(CommandLineArguments arguments)
         {
             Settings.Default.ShowInNotificationArea = arguments.ShowInNotificationArea;
-            Settings.Default.OpenSavedTimersOnStartup = arguments.OpenSavedTimers;
+            Settings.Default.OpenBackgroundTimersOnStartup = arguments.OpenBackgroundTimers;
         }
 
         /// <summary>

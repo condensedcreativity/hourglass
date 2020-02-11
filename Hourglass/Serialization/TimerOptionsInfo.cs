@@ -19,6 +19,11 @@ namespace Hourglass.Serialization
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets or sets a user-specified title for the timer.
+        /// </summary>
+        public string NextTimerTitle { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the timer window should always be displayed on top of other windows.
         /// </summary>
         public bool AlwaysOnTop { get; set; }

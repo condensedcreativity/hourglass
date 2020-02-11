@@ -153,8 +153,9 @@ Options:
         Default value   last
         Alias           -r
 
-  --open-saved-timers on|off|last
-        Opens all saved timers on start up.
+  --open-background-timers on|off|last
+  --open-saved-timers on|off|last  <deprecated, kept for historical support purposes, use --open-background-timers instead>
+        Opens all background timers on start up.
 
         Required        no
         Default value   last

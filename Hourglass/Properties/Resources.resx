@@ -784,9 +784,9 @@ $</value>
     <value>_Clear recent inputs</value>
     <comment>The text for the clear recent inputs menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="ContextMenuClearSavedTimersMenuItem" xml:space="preserve">
-    <value>_Clear saved timers</value>
-    <comment>The text for the clear saved timers menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuClearBackgroundTimersMenuItem" xml:space="preserve">
+    <value>_Clear background timers</value>
+    <comment>The text for the clear background timers menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuCloseMenuItem" xml:space="preserve">
     <value>_Close</value>
@@ -816,9 +816,9 @@ $</value>
     <value>No recent inputs</value>
     <comment>The text for the no recent inputs placeholder menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="ContextMenuNoSavedTimersMenuItem" xml:space="preserve">
-    <value>No saved timers</value>
-    <comment>The text for the no saved timers placeholder menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuNoBackgroundTimersMenuItem" xml:space="preserve">
+    <value>No background timers</value>
+    <comment>The text for the no background timers placeholder menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuNoSoundMenuItem" xml:space="preserve">
     <value>_No sound</value>
@@ -832,9 +832,9 @@ $</value>
     <value>_Recent inputs</value>
     <comment>The text for the recent inputs menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="ContextMenuSavedTimersMenuItem" xml:space="preserve">
-    <value>Sa_ved timers</value>
-    <comment>The text for the saved timers menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuBackgroundTimersMenuItem" xml:space="preserve">
+    <value>_Background timers</value>
+    <comment>The text for the background timers menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuShowInNotificationAreaMenuItem" xml:space="preserve">
     <value>S_how in notification area</value>
@@ -1061,13 +1061,13 @@ $</value>
     <value>_Reverse progress bar</value>
     <comment>The text for the reverse progress bar menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="ContextMenuOpenAllSavedTimersMenuItem" xml:space="preserve">
-    <value>_Open all saved timers</value>
-    <comment>The text for the open all saved timers menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuOpenAllBackgroundTimersMenuItem" xml:space="preserve">
+    <value>_Open all background timers</value>
+    <comment>The text for the open all background timers menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="ContextMenuOpenSavedTimersOnStartupMenuItem" xml:space="preserve">
-    <value>_Open saved timers on startup</value>
-    <comment>The text for the open saved timers on startup menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuOpenBackgroundTimersOnStartupMenuItem" xml:space="preserve">
+    <value>_Open background timers on startup</value>
+    <comment>The text for the open background timers on startup menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuShowTimeElapsedMenuItem" xml:space="preserve">
     <value>_Show time elapsed instead of time left</value>
@@ -1244,5 +1244,25 @@ $</value>
   <data name="ContextMenuShowProgressInTaskbarMenuItem" xml:space="preserve">
     <value>Show progress in taskbar</value>
     <comment>The text for the show progress in taskbar menu item</comment>
+  </data>
+  <data name="TimerSavedWithTitleFormatString" xml:space="preserve">
+    <value>{0} - "{2}"</value>
+    <comment>A format string for the string representation of a saved timer, where {1} is the timer target and {2} is the timer name, {0} is the time left and is not used</comment>
+  </data>
+  <data name="TimerSavedWithTitleLoopedFormatString" xml:space="preserve">
+    <value>{0} - "{2}" (Looped)</value>
+    <comment>A format string for the string representation of a saved timer that is looped, where {1} is the timer target and {2} is the timer name, {0} is the time left and is not used</comment>
+  </data>
+  <data name="ContextMenuNoSavedTimersMenuItem" xml:space="preserve">
+    <value>No Saved timers</value>
+    <comment>The text for the no saved timers placeholder menu item, where the character following the optional underscore (_) is the access key</comment>
+  </data>
+  <data name="ContextMenuSavedTimersMenuItem" xml:space="preserve">
+    <value>_Saved timers</value>
+    <comment>The text for the saved timers menu item, where the character following the optional underscore (_) is the access key</comment>
+  </data>
+  <data name="TimerWindowSaveButtonContent" xml:space="preserve">
+    <value>S_ave</value>
+    <comment>The text for the save button in the timer window, where the character following the optional underscore (_) is the access key</comment>
   </data>
 </root>

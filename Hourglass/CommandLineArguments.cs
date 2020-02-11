@@ -145,9 +145,9 @@ namespace Hourglass
         public bool LoopSound { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether all saved timers should be opened when the application starts.
+        /// Gets a value indicating whether all background timers should be opened when the application starts.
         /// </summary>
-        public bool OpenSavedTimers { get; private set; }
+        public bool OpenBackgroundTimers { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating what information to display in the timer window title.
@@ -291,7 +291,7 @@ namespace Hourglass
                 Theme = options.Theme,
                 Sound = options.Sound,
                 LoopSound = options.LoopSound,
-                OpenSavedTimers = Settings.Default.OpenSavedTimersOnStartup,
+                OpenBackgroundTimers = Settings.Default.OpenBackgroundTimersOnStartup,
                 WindowTitleMode = options.WindowTitleMode,
                 WindowState = windowSize.WindowState != WindowState.Minimized ? windowSize.WindowState : windowSize.RestoreWindowState,
                 RestoreWindowState = windowSize.RestoreWindowState,
@@ -330,7 +330,7 @@ namespace Hourglass
                 Theme = defaultOptions.Theme,
                 Sound = defaultOptions.Sound,
                 LoopSound = defaultOptions.LoopSound,
-                OpenSavedTimers = false,
+                OpenBackgroundTimers = false,
                 WindowTitleMode = WindowTitleMode.ApplicationName,
                 WindowState = defaultOptions.WindowSize.WindowState,
                 RestoreWindowState = defaultOptions.WindowSize.RestoreWindowState,
@@ -574,17 +574,19 @@ namespace Hourglass
                         argumentsBasedOnFactoryDefaults.LoopSound = loopSound;
                         break;
 
+                    
                     case "--open-saved-timers":
+                    case "--open-background-timers":
                     case "-v":
-                        ThrowIfDuplicateSwitch(specifiedSwitches, "--open-saved-timers");
+                        ThrowIfDuplicateSwitch(specifiedSwitches, "--open-background-timers");
 
-                        bool openSavedTimers = GetBoolValue(
+                        bool openBackgroundTimers = GetBoolValue(
                             arg,
                             remainingArgs,
-                            argumentsBasedOnMostRecentOptions.OpenSavedTimers);
+                            argumentsBasedOnMostRecentOptions.OpenBackgroundTimers);
 
-                        argumentsBasedOnMostRecentOptions.OpenSavedTimers = openSavedTimers;
-                        argumentsBasedOnFactoryDefaults.OpenSavedTimers = openSavedTimers;
+                        argumentsBasedOnMostRecentOptions.OpenBackgroundTimers = openBackgroundTimers;
+                        argumentsBasedOnFactoryDefaults.OpenBackgroundTimers = openBackgroundTimers;
                         break;
 
                     case "--window-title":

@@ -19,7 +19,7 @@ namespace Hourglass.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -170,20 +170,29 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Background timers.
+        /// </summary>
+        internal static string ContextMenuBackgroundTimersMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuBackgroundTimersMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Clear background timers.
+        /// </summary>
+        internal static string ContextMenuClearBackgroundTimersMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuClearBackgroundTimersMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Clear recent inputs.
         /// </summary>
         internal static string ContextMenuClearRecentInputsMenuItem {
             get {
                 return ResourceManager.GetString("ContextMenuClearRecentInputsMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Clear saved timers.
-        /// </summary>
-        internal static string ContextMenuClearSavedTimersMenuItem {
-            get {
-                return ResourceManager.GetString("ContextMenuClearSavedTimersMenuItem", resourceCulture);
             }
         }
         
@@ -278,6 +287,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No background timers.
+        /// </summary>
+        internal static string ContextMenuNoBackgroundTimersMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuNoBackgroundTimersMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No recent inputs.
         /// </summary>
         internal static string ContextMenuNoRecentInputsMenuItem {
@@ -287,7 +305,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No saved timers.
+        ///   Looks up a localized string similar to No Saved timers.
         /// </summary>
         internal static string ContextMenuNoSavedTimersMenuItem {
             get {
@@ -314,20 +332,20 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Open all saved timers.
+        ///   Looks up a localized string similar to _Open all background timers.
         /// </summary>
-        internal static string ContextMenuOpenAllSavedTimersMenuItem {
+        internal static string ContextMenuOpenAllBackgroundTimersMenuItem {
             get {
-                return ResourceManager.GetString("ContextMenuOpenAllSavedTimersMenuItem", resourceCulture);
+                return ResourceManager.GetString("ContextMenuOpenAllBackgroundTimersMenuItem", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Open saved timers on startup.
+        ///   Looks up a localized string similar to _Open background timers on startup.
         /// </summary>
-        internal static string ContextMenuOpenSavedTimersOnStartupMenuItem {
+        internal static string ContextMenuOpenBackgroundTimersOnStartupMenuItem {
             get {
-                return ResourceManager.GetString("ContextMenuOpenSavedTimersOnStartupMenuItem", resourceCulture);
+                return ResourceManager.GetString("ContextMenuOpenBackgroundTimersOnStartupMenuItem", resourceCulture);
             }
         }
         
@@ -368,7 +386,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sa_ved timers.
+        ///   Looks up a localized string similar to _Saved timers.
         /// </summary>
         internal static string ContextMenuSavedTimersMenuItem {
             get {
@@ -1727,6 +1745,24 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} - &quot;{2}&quot;.
+        /// </summary>
+        internal static string TimerSavedWithTitleFormatString {
+            get {
+                return ResourceManager.GetString("TimerSavedWithTitleFormatString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} - &quot;{2}&quot; (Looped).
+        /// </summary>
+        internal static string TimerSavedWithTitleLoopedFormatString {
+            get {
+                return ResourceManager.GetString("TimerSavedWithTitleLoopedFormatString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 5 minutes.
         /// </summary>
         internal static string TimerStartDefault {
@@ -1912,6 +1948,15 @@ namespace Hourglass.Properties {
         internal static string TimerWindowResumeButtonContent {
             get {
                 return ResourceManager.GetString("TimerWindowResumeButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to S_ave.
+        /// </summary>
+        internal static string TimerWindowSaveButtonContent {
+            get {
+                return ResourceManager.GetString("TimerWindowSaveButtonContent", resourceCulture);
             }
         }
         

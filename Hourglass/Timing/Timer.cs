@@ -21,11 +21,6 @@ namespace Hourglass.Timing
         #region Private Members
 
         /// <summary>
-        /// Configuration data for this timer.
-        /// </summary>
-        private readonly TimerOptions options;
-
-        /// <summary>
         /// The <see cref="TimerStart"/> used to start this timer, or <c>null</c> if the <see cref="TimerBase.State"/>
         /// is <see cref="TimerState.Stopped"/>.
         /// </summary>
@@ -83,6 +78,7 @@ namespace Hourglass.Timing
         /// </summary>
         /// <param name="options">Configuration data for this timer.</param>
         public Timer(TimerOptions options)
+            : base(options)
         {
             if (options == null)
             {
@@ -90,7 +86,6 @@ namespace Hourglass.Timing
             }
 
             this.timerStart = null;
-            this.options = TimerOptions.FromTimerOptions(options);
 
             this.UpdateHourglassTimer();
         }
@@ -104,7 +99,6 @@ namespace Hourglass.Timing
             : base(timerInfo)
         {
             this.timerStart = TimerStart.FromTimerStartInfo(timerInfo.TimerStart);
-            this.options = TimerOptions.FromTimerOptionsInfo(timerInfo.Options) ?? new TimerOptions();
 
             this.UpdateHourglassTimer();
         }
@@ -112,14 +106,6 @@ namespace Hourglass.Timing
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// Gets the configuration data for this timer.
-        /// </summary>
-        public TimerOptions Options
-        {
-            get { return this.options; }
-        }
 
         /// <summary>
         /// Gets the <see cref="TimerStart"/> used to start this timer, or <c>null</c> if the <see
@@ -288,7 +274,7 @@ namespace Hourglass.Timing
         {
             TimerInfo timerInfo = base.ToTimerInfo();
             timerInfo.TimerStart = TimerStartInfo.FromTimerStart(this.TimerStart);
-            timerInfo.Options = TimerOptionsInfo.FromTimerOptions(this.Options);
+            
             return timerInfo;
         }
 

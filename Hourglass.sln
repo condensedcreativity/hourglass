@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hourglass", "Hourglass\Hourglass.csproj", "{4E327D2C-9171-4596-82C5-A9C3CF5028E4}"
 EndProject
@@ -29,8 +29,8 @@ Global
 		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Debug Portable|Mixed Platforms.ActiveCfg = Debug Portable|Any CPU
 		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Debug Portable|Mixed Platforms.Build.0 = Debug Portable|Any CPU
 		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Debug Portable|x86.ActiveCfg = Debug Portable|Any CPU
-		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Debug|Mixed Platforms.ActiveCfg = Debug Portable|Any CPU
+		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Debug|Mixed Platforms.Build.0 = Debug Portable|Any CPU
 		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Release Portable|Mixed Platforms.ActiveCfg = Release Portable|Any CPU
 		{4E327D2C-9171-4596-82C5-A9C3CF5028E4}.Release Portable|Mixed Platforms.Build.0 = Release Portable|Any CPU
@@ -41,8 +41,8 @@ Global
 		{CBE74854-0344-4606-A854-BFA719896A98}.Debug Portable|Mixed Platforms.ActiveCfg = Debug Portable|Any CPU
 		{CBE74854-0344-4606-A854-BFA719896A98}.Debug Portable|Mixed Platforms.Build.0 = Debug Portable|Any CPU
 		{CBE74854-0344-4606-A854-BFA719896A98}.Debug Portable|x86.ActiveCfg = Debug Portable|Any CPU
-		{CBE74854-0344-4606-A854-BFA719896A98}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{CBE74854-0344-4606-A854-BFA719896A98}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CBE74854-0344-4606-A854-BFA719896A98}.Debug|Mixed Platforms.ActiveCfg = Debug Portable|Any CPU
+		{CBE74854-0344-4606-A854-BFA719896A98}.Debug|Mixed Platforms.Build.0 = Debug Portable|Any CPU
 		{CBE74854-0344-4606-A854-BFA719896A98}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{CBE74854-0344-4606-A854-BFA719896A98}.Release Portable|Mixed Platforms.ActiveCfg = Release Portable|Any CPU
 		{CBE74854-0344-4606-A854-BFA719896A98}.Release Portable|Mixed Platforms.Build.0 = Release Portable|Any CPU

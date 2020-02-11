@@ -92,6 +92,21 @@ namespace Hourglass.Windows
         private MenuItem clearRecentInputsMenuItem;
 
         /// <summary>
+        /// The "Background timers" <see cref="MenuItem"/>.
+        /// </summary>
+        private MenuItem backgroundTimersMenuItem;
+
+        /// <summary>
+        /// The "Open all background timers" <see cref="MenuItem"/>.
+        /// </summary>
+        private MenuItem openAllBackgroundTimersMenuItem;
+
+        /// <summary>
+        /// The "Clear background timers" <see cref="MenuItem"/>.
+        /// </summary>
+        private MenuItem clearBackgroundTimersMenuItem;
+
+        /// <summary>
         /// The "Saved timers" <see cref="MenuItem"/>.
         /// </summary>
         private MenuItem savedTimersMenuItem;
@@ -159,7 +174,7 @@ namespace Hourglass.Windows
         /// <summary>
         /// The "Open saved timers on startup" <see cref="MenuItem"/>.
         /// </summary>
-        private MenuItem openSavedTimersOnStartupMenuItem;
+        private MenuItem openBackgroundTimersOnStartupMenuItem;
 
         /// <summary>
         /// The "Reverse progress bar" <see cref="MenuItem"/>.
@@ -314,6 +329,7 @@ namespace Hourglass.Windows
 
             // Update dynamic items
             this.UpdateRecentInputsMenuItem();
+            this.UpdateBackgroundTimersMenuItem();
             this.UpdateSavedTimersMenuItem();
             this.UpdateThemeMenuItem();
             this.UpdateSoundMenuItem();
@@ -333,7 +349,7 @@ namespace Hourglass.Windows
         private void DispatcherTimerTick(object sender, EventArgs e)
         {
             this.lastShowed = DateTime.Now;
-            this.UpdateSavedTimersHeaders();
+            this.UpdateBackgroundTimersHeaders();
         }
 
         /// <summary>
@@ -437,7 +453,7 @@ namespace Hourglass.Windows
             this.doNotKeepComputerAwakeMenuItem.IsChecked = this.timerWindow.Options.DoNotKeepComputerAwake;
 
             // Open saved timers on startup
-            this.openSavedTimersOnStartupMenuItem.IsChecked = Settings.Default.OpenSavedTimersOnStartup;
+            this.openBackgroundTimersOnStartupMenuItem.IsChecked = Settings.Default.OpenBackgroundTimersOnStartup;
 
             // Reverse progress bar
             this.reverseProgressBarMenuItem.IsChecked = this.timerWindow.Options.ReverseProgressBar;
@@ -511,7 +527,7 @@ namespace Hourglass.Windows
             this.timerWindow.Options.DoNotKeepComputerAwake = this.doNotKeepComputerAwakeMenuItem.IsChecked;
 
             // Open saved timers on startup
-            Settings.Default.OpenSavedTimersOnStartup = this.openSavedTimersOnStartupMenuItem.IsChecked;
+            Settings.Default.OpenBackgroundTimersOnStartup = this.openBackgroundTimersOnStartupMenuItem.IsChecked;
 
             // Reverse progress bar
             this.timerWindow.Options.ReverseProgressBar = this.reverseProgressBarMenuItem.IsChecked;
@@ -627,6 +643,11 @@ namespace Hourglass.Windows
             this.recentInputsMenuItem.Header = Properties.Resources.ContextMenuRecentInputsMenuItem;
             this.Items.Add(this.recentInputsMenuItem);
 
+            // Background timers
+            this.backgroundTimersMenuItem = new MenuItem();
+            this.backgroundTimersMenuItem.Header = Properties.Resources.ContextMenuBackgroundTimersMenuItem;
+            this.Items.Add(this.backgroundTimersMenuItem);
+
             // Saved timers
             this.savedTimersMenuItem = new MenuItem();
             this.savedTimersMenuItem.Header = Properties.Resources.ContextMenuSavedTimersMenuItem;
@@ -659,12 +680,12 @@ namespace Hourglass.Windows
             this.doNotKeepComputerAwakeMenuItem.Click += this.CheckableMenuItemClick;
             this.advancedOptionsMenuItem.Items.Add(this.doNotKeepComputerAwakeMenuItem);
 
-            // Open saved timers on startup
-            this.openSavedTimersOnStartupMenuItem = new MenuItem();
-            this.openSavedTimersOnStartupMenuItem.Header = Properties.Resources.ContextMenuOpenSavedTimersOnStartupMenuItem;
-            this.openSavedTimersOnStartupMenuItem.IsCheckable = true;
-            this.openSavedTimersOnStartupMenuItem.Click += this.CheckableMenuItemClick;
-            this.advancedOptionsMenuItem.Items.Add(this.openSavedTimersOnStartupMenuItem);
+            // Open background timers on startup
+            this.openBackgroundTimersOnStartupMenuItem = new MenuItem();
+            this.openBackgroundTimersOnStartupMenuItem.Header = Properties.Resources.ContextMenuOpenBackgroundTimersOnStartupMenuItem;
+            this.openBackgroundTimersOnStartupMenuItem.IsCheckable = true;
+            this.openBackgroundTimersOnStartupMenuItem.Click += this.CheckableMenuItemClick;
+            this.advancedOptionsMenuItem.Items.Add(this.openBackgroundTimersOnStartupMenuItem);
 
             // Reverse progress bar
             this.reverseProgressBarMenuItem = new MenuItem();
@@ -905,26 +926,26 @@ namespace Hourglass.Windows
         {
             this.savedTimersMenuItem.Items.Clear();
 
-            IList<Timer> savedTimers = TimerManager.Instance.ResumableTimers;
+            IList<Timer> savedTimers = TimerManager.Instance.SavedTimers; 
 
             if (savedTimers.Count == 0)
             {
-                MenuItem noRunningTimersMenuItem = new MenuItem();
-                noRunningTimersMenuItem.Header = Properties.Resources.ContextMenuNoSavedTimersMenuItem;
-                noRunningTimersMenuItem.Foreground = Brushes.DarkGray;
+                MenuItem noSavedTimersMenuItem = new MenuItem();
+                noSavedTimersMenuItem.Header = Properties.Resources.ContextMenuNoSavedTimersMenuItem;
+                noSavedTimersMenuItem.Foreground = Brushes.DarkGray;
 
-                this.savedTimersMenuItem.Items.Add(noRunningTimersMenuItem);
+                this.savedTimersMenuItem.Items.Add(noSavedTimersMenuItem);
             }
             else
             {
-                foreach (Timer savedTimer in savedTimers)
+                foreach (Timer timer in savedTimers)
                 {
-                    savedTimer.Update();
+                    timer.Update();
 
                     MenuItem timerMenuItem = new MenuItem();
-                    timerMenuItem.Header = this.GetHeaderForTimer(savedTimer);
-                    timerMenuItem.Icon = this.GetIconForTimer(savedTimer);
-                    timerMenuItem.Tag = savedTimer;
+                    timerMenuItem.Header = this.GetHeaderForTimer(timer);
+                    timerMenuItem.Icon = this.GetIconForTimer(timer);
+                    timerMenuItem.Tag = timer;
                     timerMenuItem.Click += this.SavedTimerMenuItemClick;
 
                     this.savedTimersMenuItem.Items.Add(timerMenuItem);
@@ -932,7 +953,8 @@ namespace Hourglass.Windows
             }
 
             this.savedTimersMenuItem.Items.Add(new Separator());
-
+/*
+ * TODO implement if desired
             if (this.openAllSavedTimersMenuItem == null)
             {
                 this.openAllSavedTimersMenuItem = new MenuItem();
@@ -940,8 +962,11 @@ namespace Hourglass.Windows
                 this.openAllSavedTimersMenuItem.Click += this.OpenAllSavedTimersMenuItemClick;
             }
 
-            this.savedTimersMenuItem.Items.Add(this.openAllSavedTimersMenuItem);
+            this.backgroundTimersMenuItem.Items.Add(this.openAllSavedTimersMenuItem);
+*/
 
+/*
+ * TODO implement if desired
             if (this.clearSavedTimersMenuItem == null)
             {
                 this.clearSavedTimersMenuItem = new MenuItem();
@@ -950,6 +975,7 @@ namespace Hourglass.Windows
             }
 
             this.savedTimersMenuItem.Items.Add(this.clearSavedTimersMenuItem);
+*/
         }
 
         /// <summary>
@@ -967,6 +993,158 @@ namespace Hourglass.Windows
                 }
             }
         }
+
+
+        /// <summary>
+        /// Invoked when the "Open all saved timers" <see cref="MenuItem"/> is clicked.
+        /// </summary>
+        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+        /// <param name="e">The event data.</param>
+        private void OpenAllSavedTimersMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            foreach (Timer savedTimer in TimerManager.Instance.SavedTimers) 
+            {
+                this.ShowTimer(savedTimer);
+            }
+        }
+
+        /// <summary>
+        /// Invoked when the "Clear saved timers" <see cref="MenuItem"/> is clicked.
+        /// </summary>
+        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+        /// <param name="e">The event data.</param>
+        private void ClearSavedTimersMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            TimerManager.Instance.ClearSavedTimers();
+        }
+
+        /// <summary>
+        /// Invoked when a background timer <see cref="MenuItem"/> is clicked.
+        /// </summary>
+        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+        /// <param name="e">The event data.</param>
+        private void SavedTimerMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            Timer savedTimer = (Timer)menuItem.Tag;
+            Timer newTimer = new Timer(savedTimer.ToTimerInfo());
+            newTimer.Start(newTimer.TimerStart);
+            TimerManager.Instance.Add(newTimer);
+            this.ShowTimer(newTimer);
+        }
+
+        #endregion
+
+        #region Private Methods (Background Timers)
+
+        /// <summary>
+        /// Updates the <see cref="backgroundTimersMenuItem"/>.
+        /// </summary>
+        private void UpdateBackgroundTimersMenuItem()
+        {
+            this.backgroundTimersMenuItem.Items.Clear();
+
+            IList<Timer> backgroundTimers = TimerManager.Instance.BackgroundTimers;
+
+            if (backgroundTimers.Count == 0)
+            {
+                MenuItem noBackgroundTimersMenuItem = new MenuItem();
+                noBackgroundTimersMenuItem.Header = Properties.Resources.ContextMenuNoBackgroundTimersMenuItem;
+                noBackgroundTimersMenuItem.Foreground = Brushes.DarkGray;
+
+                this.backgroundTimersMenuItem.Items.Add(noBackgroundTimersMenuItem);
+            }
+            else
+            {
+                foreach (Timer timer in backgroundTimers)
+                {
+                    timer.Update();
+
+                    MenuItem timerMenuItem = new MenuItem();
+                    timerMenuItem.Header = this.GetHeaderForTimer(timer);
+                    timerMenuItem.Icon = this.GetIconForTimer(timer);
+                    timerMenuItem.Tag = timer;
+                    timerMenuItem.Click += this.BackgroundTimerMenuItemClick;
+
+                    this.backgroundTimersMenuItem.Items.Add(timerMenuItem);
+                }
+            }
+
+            this.backgroundTimersMenuItem.Items.Add(new Separator());
+
+            if (this.openAllBackgroundTimersMenuItem == null)
+            {
+                this.openAllBackgroundTimersMenuItem = new MenuItem();
+                this.openAllBackgroundTimersMenuItem.Header = Properties.Resources.ContextMenuOpenAllBackgroundTimersMenuItem;
+                this.openAllBackgroundTimersMenuItem.Click += this.OpenAllBackgroundTimersMenuItemClick;
+            }
+
+            this.backgroundTimersMenuItem.Items.Add(this.openAllBackgroundTimersMenuItem);
+
+            if (this.clearBackgroundTimersMenuItem == null)
+            {
+                this.clearBackgroundTimersMenuItem = new MenuItem();
+                this.clearBackgroundTimersMenuItem.Header = Properties.Resources.ContextMenuClearBackgroundTimersMenuItem;
+                this.clearBackgroundTimersMenuItem.Click += this.ClearBackgroundTimersMenuItemClick;
+            }
+
+            this.backgroundTimersMenuItem.Items.Add(this.clearBackgroundTimersMenuItem);
+        }
+
+        /// <summary>
+        /// Updates the <see cref="MenuItem.Header"/> of the items in the <see cref="savedTimersMenuItem"/>.
+        /// </summary>
+        private void UpdateBackgroundTimersHeaders()
+        {
+            foreach (MenuItem menuItem in this.backgroundTimersMenuItem.Items.OfType<MenuItem>())
+            {
+                Timer timer = menuItem.Tag as Timer;
+                if (timer != null)
+                {
+                    menuItem.Header = this.GetHeaderForTimer(timer);
+                    menuItem.Icon = this.GetIconForTimer(timer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invoked when the "Open all background timers" <see cref="MenuItem"/> is clicked.
+        /// </summary>
+        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+        /// <param name="e">The event data.</param>
+        private void OpenAllBackgroundTimersMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            foreach (Timer timer in TimerManager.Instance.BackgroundTimers)
+            {
+                this.ShowTimer(timer);
+            }
+        }
+
+        /// <summary>
+        /// Invoked when the "Clear background timers" <see cref="MenuItem"/> is clicked.
+        /// </summary>
+        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+        /// <param name="e">The event data.</param>
+        private void ClearBackgroundTimersMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            TimerManager.Instance.ClearBackgroundTimers();
+        }
+
+        /// <summary>
+        /// Invoked when a background timer <see cref="MenuItem"/> is clicked.
+        /// </summary>
+        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+        /// <param name="e">The event data.</param>
+        private void BackgroundTimerMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            Timer savedTimer = (Timer)menuItem.Tag;
+            this.ShowTimer(savedTimer);
+        }
+
+        #endregion
+
+        #region Private Methods (Timer)
 
         /// <summary>
         /// Returns an object that can be set for the <see cref="MenuItem.Header"/> of a <see cref="MenuItem"/> that
@@ -1028,89 +1206,54 @@ namespace Hourglass.Windows
         }
 
         /// <summary>
-        /// Invoked when a saved timer <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void SavedTimerMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            MenuItem menuItem = (MenuItem)sender;
-            Timer savedTimer = (Timer)menuItem.Tag;
-            this.ShowSavedTimer(savedTimer);
-        }
-
-        /// <summary>
-        /// Invoked when the "Open all saved timers" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void OpenAllSavedTimersMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            foreach (Timer savedTimer in TimerManager.Instance.ResumableTimers)
-            {
-                this.ShowSavedTimer(savedTimer);
-            }
-        }
-
-        /// <summary>
         /// Shows an existing <see cref="Timer"/>.
         /// </summary>
-        /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
-        private void ShowSavedTimer(Timer savedTimer)
+        /// <param name="timer">An existing <see cref="Timer"/>.</param>
+        private void ShowTimer(Timer timer)
         {
             if (this.timerWindow.Timer.State == TimerState.Stopped || this.timerWindow.Timer.State == TimerState.Expired)
             {
-                this.ShowSavedTimerInCurrentWindow(savedTimer);
+                this.ShowTimerInCurrentWindow(timer);
             }
             else
             {
-                this.ShowSavedTimerInNewWindow(savedTimer);
+                this.ShowTimerInNewWindow(timer);
             }
         }
 
         /// <summary>
         /// Shows an existing <see cref="Timer"/> in the current <see cref="TimerWindow"/>.
         /// </summary>
-        /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
-        private void ShowSavedTimerInCurrentWindow(Timer savedTimer)
+        /// <param name="timer">An existing <see cref="Timer"/>.</param>
+        private void ShowTimerInCurrentWindow(Timer timer)
         {
-            if (savedTimer.Options.WindowSize != null)
+            if (timer.Options.WindowSize != null)
             {
-                this.timerWindow.Restore(savedTimer.Options.WindowSize);
+                this.timerWindow.Restore(timer.Options.WindowSize);
             }
 
-            this.timerWindow.Show(savedTimer);
+            this.timerWindow.Show(timer);
             this.UpdateMenuFromOptions();
         }
 
         /// <summary>
         /// Shows an existing <see cref="Timer"/> in a new <see cref="TimerWindow"/>.
         /// </summary>
-        /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
-        private void ShowSavedTimerInNewWindow(Timer savedTimer)
+        /// <param name="timer">An existing <see cref="Timer"/>.</param>
+        private void ShowTimerInNewWindow(Timer timer)
         {
             TimerWindow newTimerWindow = new TimerWindow();
 
-            if (savedTimer.Options.WindowSize != null)
+            if (timer.Options.WindowSize != null)
             {
-                newTimerWindow.Restore(savedTimer.Options.WindowSize);
+                newTimerWindow.Restore(timer.Options.WindowSize);
             }
             else
             {
                 newTimerWindow.RestoreFromWindow(this.timerWindow);
             }
 
-            newTimerWindow.Show(savedTimer);
-        }
-
-        /// <summary>
-        /// Invoked when the "Clear saved timers" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void ClearSavedTimersMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            TimerManager.Instance.ClearResumableTimers();
+            newTimerWindow.Show(timer);
         }
 
         #endregion

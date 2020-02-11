@@ -36,7 +36,12 @@ namespace Hourglass.Timing
         /// <summary>
         /// Indicates that the timer is expired.
         /// </summary>
-        Expired
+        Expired,
+
+        /// <summary>
+        /// Indicates that the timer is saved.
+        /// </summary>
+        Saved
     }
 
     /// <summary>
@@ -54,6 +59,11 @@ namespace Hourglass.Timing
         #endregion
 
         #region Private Members
+
+        /// <summary>
+        /// Configuration data for this timer.
+        /// </summary>
+        private readonly TimerOptions options;
 
         /// <summary>
         /// The <see cref="TimerState"/> of this timer.
@@ -127,6 +137,21 @@ namespace Hourglass.Timing
         /// <summary>
         /// Initializes a new instance of the <see cref="TimerBase"/> class.
         /// </summary>
+        /// <param name="options">Configuration data for this timer.</param>
+        protected TimerBase(TimerOptions options)
+            :this()
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException("options");
+            }
+
+            this.options = TimerOptions.FromTimerOptions(options);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimerBase"/> class.
+        /// </summary>
         /// <param name="timerInfo">A <see cref="TimerInfo"/> representing the state of the <see cref="TimerBase"/>.</param>
         protected TimerBase(TimerInfo timerInfo)
             : this()
@@ -138,6 +163,8 @@ namespace Hourglass.Timing
             this.timeLeft = timerInfo.TimeLeft;
             this.timeExpired = timerInfo.TimeExpired;
             this.totalTime = timerInfo.TotalTime;
+
+            this.options = TimerOptions.FromTimerOptionsInfo(timerInfo.Options) ?? new TimerOptions();
 
             if (this.state == TimerState.Running)
             {
@@ -187,6 +214,14 @@ namespace Hourglass.Timing
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets the configuration data for this timer.
+        /// </summary>
+        public TimerOptions Options
+        {
+            get { return this.options; }
+        }
 
         /// <summary>
         /// Gets the <see cref="TimerState"/> of this timer.
@@ -438,6 +473,31 @@ namespace Hourglass.Timing
         }
 
         /// <summary>
+        /// Sets the timer as <see cref="TimerState.Saved"/>.
+        /// </summary>
+        /// <remarks>
+        /// Marks a timer as <see cref="TimerState.Saved"/> so that is can be reused to create new timers in the future.
+        /// </remarks>
+        /// <exception cref="ObjectDisposedException">If the timer has been disposed.</exception>
+        public virtual void Save()
+        {
+            this.ThrowIfDisposed();
+
+            this.state = TimerState.Saved;
+            this.timeElapsed = TimeSpan.Zero;
+            this.timeLeft = this.totalTime;
+            this.timeExpired = TimeSpan.Zero;
+            this.startTime = null;
+            this.endTime = null;
+
+            this.dispatcherTimer.Stop();
+
+            this.OnPropertyChanged("State", "StartTime", "EndTime", "TimeElapsed", "TimeExpired", "TimeLeft");
+            this.OnSaved();
+        }
+
+
+        /// <summary>
         /// Returns the representation of the <see cref="TimerInfo"/> used for XML serialization.
         /// </summary>
         /// <returns>The representation of the <see cref="TimerInfo"/> used for XML serialization.</returns>
@@ -451,7 +511,8 @@ namespace Hourglass.Timing
                 TimeElapsed = this.timeElapsed,
                 TimeLeft = this.timeLeft,
                 TimeExpired = this.timeExpired,
-                TotalTime = this.totalTime
+                TotalTime = this.totalTime,
+                Options = TimerOptionsInfo.FromTimerOptions(this.Options)
             };
         }
 
@@ -513,6 +574,19 @@ namespace Hourglass.Timing
         protected virtual void OnStopped()
         {
             EventHandler eventHandler = this.Stopped;
+
+            if (eventHandler != null)
+            {
+                eventHandler(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Saved"/> event.
+        /// </summary>
+        protected virtual void OnSaved()
+        {
+            EventHandler eventHandler = this.Paused;
 
             if (eventHandler != null)
             {
