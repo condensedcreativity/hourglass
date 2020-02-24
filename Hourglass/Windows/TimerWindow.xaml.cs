@@ -825,27 +825,6 @@ namespace Hourglass.Windows
             this.BeginExpirationAnimation();
             this.BeginExpirationSound();
         }
-        
-        /// <summary>
-        /// Starts the timer that is specified to follow the current timer.
-        /// </summary>
-        /// TODO this should be moved to TimerManager so that the window does not have to be open to execute the next timer
-        private void StartNextTimer(String nextTimerTitle)
-        {
-            foreach (Timer availableTimer in TimerManager.Instance.SavedTimers)
-            {
-                if (nextTimerTitle.Equals(availableTimer.Options.Title))
-                {
-                    TimerWindow window = new TimerWindow();
-                    window.RestoreFromWindow(this);
-                    Timer nextTimer = new Timing.Timer(availableTimer.ToTimerInfo());
-                    TimerManager.Instance.Add(nextTimer);
-                    nextTimer.Start(nextTimer.TimerStart);
-                    window.Show(nextTimer);
-                    break;
-                }
-            }
-        }
 
         /// <summary>
         /// Begins the animation used notify the user that the input was invalid.
@@ -1515,12 +1494,6 @@ namespace Hourglass.Windows
         private void TimerExpired(object sender, EventArgs e)
         {
             this.BeginExpirationAnimationAndSound();
-            Timer expiredTimer = sender as Timer;
-            if (!String.IsNullOrEmpty(expiredTimer.Options.NextTimerTitle))
-            {
-                this.StartNextTimer(expiredTimer.Options.NextTimerTitle);
-            }
-            
         }
 
         /// <summary>

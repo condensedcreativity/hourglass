@@ -110,6 +110,7 @@ namespace Hourglass.Managers
                 throw new InvalidOperationException();
             }
 
+            timer.Expired += this.TimerExpired;
             this.timers.Insert(0, timer);
         }
 
@@ -126,6 +127,7 @@ namespace Hourglass.Managers
                 throw new InvalidOperationException();
             }
 
+            timer.Expired -= this.TimerExpired;
             this.timers.Remove(timer);
             timer.Dispose();
         }
@@ -167,5 +169,41 @@ namespace Hourglass.Managers
             return Application.Current != null
                 && Application.Current.Windows.OfType<TimerWindow>().Any(w => w.Timer == timer);
         }
+
+        #region Timer Events
+        /// <summary>
+        /// Invoked when the timer expires.
+        /// </summary>
+        /// <param name="sender">The timer.</param>
+        /// <param name="e">The event data.</param>
+        private void TimerExpired(object sender, EventArgs e)
+        {
+            Timer expiredTimer = sender as Timer;
+            if (!String.IsNullOrEmpty(expiredTimer.Options.NextTimerTitle))
+            {
+                this.StartNextTimer(expiredTimer.Options.NextTimerTitle);
+            }
+        }
+
+        /// <summary>
+        /// Starts the timer that is specified to follow the current timer.
+        /// </summary>
+        private void StartNextTimer(String nextTimerTitle)
+        {
+            foreach (Timer availableTimer in this.SavedTimers)
+            {
+                if (nextTimerTitle.Equals(availableTimer.Options.Title))
+                {
+                    TimerWindow window = new TimerWindow();
+                    Timer nextTimer = new Timing.Timer(availableTimer.ToTimerInfo());
+                    this.Add(nextTimer);
+                    nextTimer.Start(nextTimer.TimerStart);
+                    window.Show(nextTimer);
+                    break;
+                }
+            }
+        }
+
+        #endregion
     }
 }

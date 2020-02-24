@@ -574,7 +574,6 @@ namespace Hourglass
                         argumentsBasedOnFactoryDefaults.LoopSound = loopSound;
                         break;
 
-                    
                     case "--open-saved-timers":
                     case "--open-background-timers":
                     case "-v":
