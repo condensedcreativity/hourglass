@@ -236,6 +236,17 @@
                                         PreviewMouseDown="TimerTextBoxPreviewMouseDown"
                                         PreviewGotKeyboardFocus="TimerTextBoxPreviewGotKeyboardFocus"
                                         TextAlignment="Center"/>
+                <local:SizeToFitTextBox x:Name="NextTimerTextBox"
+                                        Background="{x:Null}"
+                                        BorderBrush="{x:Null}"
+                                        FontFamily="Segoe UI Light, Segoe UI"
+                                        Margin="0 1 0 4"
+                                        MaxFontSize="12"
+                                        MinFontSize="8"
+                                        PreviewMouseDown="NextTimerTextBoxPreviewMouseDown"
+                                        PreviewGotKeyboardFocus="NextTimerTextBoxPreviewGotKeyboardFocus"
+                                        TextAlignment="Center"/>
+
                 <Grid>
                     <Label x:Name="TimeExpiredLabel"
                            Content="{Binding RelativeSource={RelativeSource AncestorType=local:TimerWindow}, Path=Timer.TimeExpiredAsString}"

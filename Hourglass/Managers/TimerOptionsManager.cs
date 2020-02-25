@@ -84,6 +84,8 @@ namespace Hourglass.Managers
 
             // Never save a title
             this.mostRecentOptions.Title = string.Empty;
+            // Never save a next timer title
+            this.mostRecentOptions.NextTimerTitle = string.Empty;
 
             // Never save shutting down when expired or lock interface options
             this.mostRecentOptions.ShutDownWhenExpired = false;

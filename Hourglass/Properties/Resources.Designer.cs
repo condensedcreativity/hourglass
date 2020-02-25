@@ -1925,6 +1925,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No next timer specified.
+        /// </summary>
+        internal static string TimerWindowNextTimerTextHint {
+            get {
+                return ResourceManager.GetString("TimerWindowNextTimerTextHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Pause.
         /// </summary>
         internal static string TimerWindowPauseButtonContent {

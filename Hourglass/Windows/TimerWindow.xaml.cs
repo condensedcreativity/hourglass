@@ -593,6 +593,7 @@ namespace Hourglass.Windows
 
             this.TitleTextBox.Text = this.Timer.Options.Title;
             this.TimerTextBox.Text = this.LastTimerStart != null ? this.LastTimerStart.ToString() : string.Empty;
+            this.NextTimerTextBox.Text = this.Timer.Options.NextTimerTitle;
 
             textBoxToFocus = textBoxToFocus ?? this.TimerTextBox;
             textBoxToFocus.SelectAll();
@@ -701,6 +702,7 @@ namespace Hourglass.Windows
         {
             Watermark.SetHint(this.TitleTextBox, Properties.Resources.TimerWindowTitleTextHint);
             Watermark.SetHint(this.TimerTextBox, Properties.Resources.TimerWindowTimerTextHint);
+            Watermark.SetHint(this.NextTimerTextBox, Properties.Resources.TimerWindowNextTimerTextHint);
 
             this.StartButton.Content = Properties.Resources.TimerWindowStartButtonContent;
             this.PauseButton.Content = Properties.Resources.TimerWindowPauseButtonContent;
@@ -1057,10 +1059,13 @@ namespace Hourglass.Windows
                     // Restore the border, context menu, and watermark text that appear for the text boxes
                     this.TitleTextBox.BorderThickness = new Thickness(1);
                     this.TimerTextBox.BorderThickness = new Thickness(1);
+                    this.NextTimerTextBox.BorderThickness = new Thickness(1);
                     this.TitleTextBox.IsReadOnly = false;
                     this.TimerTextBox.IsReadOnly = false;
+                    this.NextTimerTextBox.IsReadOnly = false;
                     Watermark.SetHint(this.TitleTextBox, Properties.Resources.TimerWindowTitleTextHint);
                     Watermark.SetHint(this.TimerTextBox, Properties.Resources.TimerWindowTimerTextHint);
+                    Watermark.SetHint(this.NextTimerTextBox, Properties.Resources.TimerWindowNextTimerTextHint);
 
                     this.Topmost = this.Options.AlwaysOnTop;
 
@@ -1080,6 +1085,7 @@ namespace Hourglass.Windows
                         this.TitleTextBox.TextChanged += this.TitleTextBoxTextChanged;
 
                         this.TimerTextBox.Text = this.Timer.Options.Title;
+                        this.NextTimerTextBox.Text = this.Timer.Options.NextTimerTitle;
                     }
                     else
                     {
@@ -1090,6 +1096,8 @@ namespace Hourglass.Windows
                         this.TimerTextBox.Text = this.Timer.Options.ShowTimeElapsed
                             ? this.Timer.TimeElapsedAsString
                             : this.Timer.TimeLeftAsString;
+
+                        this.NextTimerTextBox.Text = this.Timer.Options.NextTimerTitle;
                     }
 
                     this.ProgressBar.Value = this.GetProgressBarValue();
@@ -1110,10 +1118,13 @@ namespace Hourglass.Windows
                         // Hide the border, context menu, and watermark text that appear for the text boxes
                         this.TitleTextBox.BorderThickness = new Thickness(0);
                         this.TimerTextBox.BorderThickness = new Thickness(0);
+                        this.NextTimerTextBox.BorderThickness = new Thickness(0);
                         this.TitleTextBox.IsReadOnly = true;
                         this.TimerTextBox.IsReadOnly = true;
+                        this.NextTimerTextBox.IsReadOnly = true;
                         Watermark.SetHint(this.TitleTextBox, null);
                         Watermark.SetHint(this.TimerTextBox, null);
+                        Watermark.SetHint(this.NextTimerTextBox, null);
                     }
                     else
                     {
@@ -1130,10 +1141,13 @@ namespace Hourglass.Windows
                         // Restore the border, context menu, and watermark text that appear for the text boxes
                         this.TitleTextBox.BorderThickness = new Thickness(1);
                         this.TimerTextBox.BorderThickness = new Thickness(1);
+                        this.NextTimerTextBox.BorderThickness = new Thickness(1);
                         this.TitleTextBox.IsReadOnly = false;
                         this.TimerTextBox.IsReadOnly = false;
+                        this.NextTimerTextBox.IsReadOnly = false;
                         Watermark.SetHint(this.TitleTextBox, Properties.Resources.TimerWindowTitleTextHint);
                         Watermark.SetHint(this.TimerTextBox, Properties.Resources.TimerWindowTimerTextHint);
+                        Watermark.SetHint(this.NextTimerTextBox, Properties.Resources.TimerWindowNextTimerTextHint);
                     }
 
                     this.Topmost = this.Options.AlwaysOnTop;
@@ -1162,6 +1176,9 @@ namespace Hourglass.Windows
             this.TitleTextBox.Foreground = this.Theme.SecondaryTextBrush;
             this.TitleTextBox.CaretBrush = this.Theme.SecondaryTextBrush;
             Watermark.SetHintBrush(this.TitleTextBox, this.Theme.SecondaryHintBrush);
+            this.NextTimerTextBox.Foreground = this.Theme.SecondaryTextBrush;
+            this.NextTimerTextBox.CaretBrush = this.Theme.SecondaryTextBrush;
+            Watermark.SetHintBrush(this.NextTimerTextBox, this.Theme.SecondaryHintBrush);
             this.TimeExpiredLabel.Foreground = this.Theme.SecondaryTextBrush;
 
             foreach (Button button in this.ButtonPanel.GetAllVisualChildren().OfType<Button>())
@@ -2057,5 +2074,15 @@ namespace Hourglass.Windows
         }
 
         #endregion
+
+        private void NextTimerTextBoxPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void NextTimerTextBoxPreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+
+        }
     }
 }

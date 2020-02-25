@@ -1265,4 +1265,8 @@ $</value>
     <value>S_ave</value>
     <comment>The text for the save button in the timer window, where the character following the optional underscore (_) is the access key</comment>
   </data>
+  <data name="TimerWindowNextTimerTextHint" xml:space="preserve">
+    <value>No next timer specified</value>
+    <comment>The watermark text that is displayed in the next timer text box in the timer window</comment>
+  </data>
 </root>
