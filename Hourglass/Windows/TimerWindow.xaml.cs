@@ -20,6 +20,7 @@ namespace Hourglass.Windows
     using Hourglass.Managers;
     using Hourglass.Properties;
     using Hourglass.Timing;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The mode of a <see cref="TimerWindow"/>.
@@ -35,6 +36,76 @@ namespace Hourglass.Windows
         /// Indicates that the <see cref="TimerWindow"/> is displaying the status of a timer.
         /// </summary>
         Status
+    }
+
+    /// <summary>
+    /// The display text and corresponding values of a <see cref="NextTimerComboBox"/>.
+    /// </summary>
+    public class TimerTitleRepresentation
+    {
+        private string ActualValue = "";
+        private string DisplayText = Properties.Resources.TimerWindowNextTimerTextHint;
+
+        public TimerTitleRepresentation() { }
+        public TimerTitleRepresentation(string Value, string Text)
+        {
+            this.Value = Value;
+            this.DisplayText = Text;
+        }
+
+        /// <summary>
+        /// Gets or sets a value representing the text string used to access a timer that will be used as the next timer.  A Null value indicates that no Next Timer will be assigned.
+        /// </summary>
+        public String Value
+        {
+            get
+            {
+                return this.ActualValue;
+            }
+
+            set
+            {
+                this.ActualValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value representing the text string diplayed to the end user that will be used to select the next timer. 
+        /// </summary>
+        public String Text
+        {
+            get
+            {
+                return this.DisplayText;
+            }
+
+            set
+            {
+                if ((value == null) || (value == ""))
+                {
+                    value = Properties.Resources.TimerWindowNextTimerTextHint;
+                }
+                this.DisplayText = value;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            //Check for null and compare run-time types.
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                TimerTitleRepresentation test = (TimerTitleRepresentation)obj;
+                if ((test.Text == this.Text) && (test.Value == this.Value))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>
@@ -593,7 +664,7 @@ namespace Hourglass.Windows
 
             this.TitleTextBox.Text = this.Timer.Options.Title;
             this.TimerTextBox.Text = this.LastTimerStart != null ? this.LastTimerStart.ToString() : string.Empty;
-            this.NextTimerTextBox.Text = this.Timer.Options.NextTimerTitle;
+            this.SetNextTimerComboBoxSelectedValue(this.Timer.Options.NextTimerTitle);
 
             textBoxToFocus = textBoxToFocus ?? this.TimerTextBox;
             textBoxToFocus.SelectAll();
@@ -702,7 +773,7 @@ namespace Hourglass.Windows
         {
             Watermark.SetHint(this.TitleTextBox, Properties.Resources.TimerWindowTitleTextHint);
             Watermark.SetHint(this.TimerTextBox, Properties.Resources.TimerWindowTimerTextHint);
-            Watermark.SetHint(this.NextTimerTextBox, Properties.Resources.TimerWindowNextTimerTextHint);
+            Watermark.SetHint(this.NextTimerComboBox, Properties.Resources.TimerWindowNextTimerTextHint);
 
             this.StartButton.Content = Properties.Resources.TimerWindowStartButtonContent;
             this.PauseButton.Content = Properties.Resources.TimerWindowPauseButtonContent;
@@ -713,8 +784,45 @@ namespace Hourglass.Windows
             this.CancelButton.Content = Properties.Resources.TimerWindowCancelButtonContent;
             this.UpdateButton.Content = Properties.Resources.TimerWindowUpdateButtonContent;
             this.SaveButton.Content = Properties.Resources.TimerWindowSaveButtonContent;
+
+            this.PopulateNextTimerComboBox();
         }
 
+        /// <summary>
+        /// Populate the Next Timer Combo Box with the names of the saved timers.
+        /// </summary>
+        private void PopulateNextTimerComboBox()
+        {
+            List<TimerTitleRepresentation> savedTimers = new List<TimerTitleRepresentation>();
+            foreach (Timer t in TimerManager.Instance.SavedTimers)
+            {
+                TimerTitleRepresentation timerRepresentation = new TimerTitleRepresentation(t.Title, t.Title);
+                savedTimers.Add(timerRepresentation);
+            }
+
+            TimerTitleRepresentation defaultValue = new TimerTitleRepresentation();
+            savedTimers.Insert(0, defaultValue);
+            this.NextTimerComboBox.ItemsSource = savedTimers;
+        }
+
+        /// <summary>
+        /// Sets the currently selected value of the Next Timer Combo Box.
+        /// </summary>
+        private void SetNextTimerComboBoxSelectedValue(string selectedTimerTitle)
+        {
+            TimerTitleRepresentation CurrentSelection;
+
+            if ((selectedTimerTitle == null) || (selectedTimerTitle == ""))
+            {
+                CurrentSelection = new TimerTitleRepresentation();
+            }
+            else
+            {
+                CurrentSelection = new TimerTitleRepresentation(selectedTimerTitle, selectedTimerTitle);
+            }
+
+            this.NextTimerComboBox.SelectedItem = CurrentSelection;
+        }
         #endregion
 
         #region Private Methods (Animations and Sounds)
@@ -1059,13 +1167,13 @@ namespace Hourglass.Windows
                     // Restore the border, context menu, and watermark text that appear for the text boxes
                     this.TitleTextBox.BorderThickness = new Thickness(1);
                     this.TimerTextBox.BorderThickness = new Thickness(1);
-                    this.NextTimerTextBox.BorderThickness = new Thickness(1);
+                    this.NextTimerComboBox.BorderThickness = new Thickness(1);
                     this.TitleTextBox.IsReadOnly = false;
                     this.TimerTextBox.IsReadOnly = false;
-                    this.NextTimerTextBox.IsReadOnly = false;
+                    this.NextTimerComboBox.IsEnabled = true;
                     Watermark.SetHint(this.TitleTextBox, Properties.Resources.TimerWindowTitleTextHint);
                     Watermark.SetHint(this.TimerTextBox, Properties.Resources.TimerWindowTimerTextHint);
-                    Watermark.SetHint(this.NextTimerTextBox, Properties.Resources.TimerWindowNextTimerTextHint);
+                    Watermark.SetHint(this.NextTimerComboBox, Properties.Resources.TimerWindowNextTimerTextHint);
 
                     this.Topmost = this.Options.AlwaysOnTop;
 
@@ -1085,7 +1193,7 @@ namespace Hourglass.Windows
                         this.TitleTextBox.TextChanged += this.TitleTextBoxTextChanged;
 
                         this.TimerTextBox.Text = this.Timer.Options.Title;
-                        this.NextTimerTextBox.Text = this.Timer.Options.NextTimerTitle;
+                        this.SetNextTimerComboBoxSelectedValue(this.Timer.Options.NextTimerTitle);
                     }
                     else
                     {
@@ -1097,7 +1205,7 @@ namespace Hourglass.Windows
                             ? this.Timer.TimeElapsedAsString
                             : this.Timer.TimeLeftAsString;
 
-                        this.NextTimerTextBox.Text = this.Timer.Options.NextTimerTitle;
+                        this.SetNextTimerComboBoxSelectedValue(this.Timer.Options.NextTimerTitle);
                     }
 
                     this.ProgressBar.Value = this.GetProgressBarValue();
@@ -1118,13 +1226,13 @@ namespace Hourglass.Windows
                         // Hide the border, context menu, and watermark text that appear for the text boxes
                         this.TitleTextBox.BorderThickness = new Thickness(0);
                         this.TimerTextBox.BorderThickness = new Thickness(0);
-                        this.NextTimerTextBox.BorderThickness = new Thickness(0);
+                        this.NextTimerComboBox.BorderThickness = new Thickness(0);
                         this.TitleTextBox.IsReadOnly = true;
                         this.TimerTextBox.IsReadOnly = true;
-                        this.NextTimerTextBox.IsReadOnly = true;
+                        this.NextTimerComboBox.IsEnabled = false;
                         Watermark.SetHint(this.TitleTextBox, null);
                         Watermark.SetHint(this.TimerTextBox, null);
-                        Watermark.SetHint(this.NextTimerTextBox, null);
+                        Watermark.SetHint(this.NextTimerComboBox, null);
                     }
                     else
                     {
@@ -1141,13 +1249,13 @@ namespace Hourglass.Windows
                         // Restore the border, context menu, and watermark text that appear for the text boxes
                         this.TitleTextBox.BorderThickness = new Thickness(1);
                         this.TimerTextBox.BorderThickness = new Thickness(1);
-                        this.NextTimerTextBox.BorderThickness = new Thickness(1);
+                        this.NextTimerComboBox.BorderThickness = new Thickness(1);
                         this.TitleTextBox.IsReadOnly = false;
                         this.TimerTextBox.IsReadOnly = false;
-                        this.NextTimerTextBox.IsReadOnly = false;
+                        this.NextTimerComboBox.IsEnabled = true;
                         Watermark.SetHint(this.TitleTextBox, Properties.Resources.TimerWindowTitleTextHint);
                         Watermark.SetHint(this.TimerTextBox, Properties.Resources.TimerWindowTimerTextHint);
-                        Watermark.SetHint(this.NextTimerTextBox, Properties.Resources.TimerWindowNextTimerTextHint);
+                        Watermark.SetHint(this.NextTimerComboBox, Properties.Resources.TimerWindowNextTimerTextHint);
                     }
 
                     this.Topmost = this.Options.AlwaysOnTop;
@@ -1176,9 +1284,8 @@ namespace Hourglass.Windows
             this.TitleTextBox.Foreground = this.Theme.SecondaryTextBrush;
             this.TitleTextBox.CaretBrush = this.Theme.SecondaryTextBrush;
             Watermark.SetHintBrush(this.TitleTextBox, this.Theme.SecondaryHintBrush);
-            this.NextTimerTextBox.Foreground = this.Theme.SecondaryTextBrush;
-            this.NextTimerTextBox.CaretBrush = this.Theme.SecondaryTextBrush;
-            Watermark.SetHintBrush(this.NextTimerTextBox, this.Theme.SecondaryHintBrush);
+            this.NextTimerComboBox.Foreground = this.Theme.SecondaryTextBrush;
+            Watermark.SetHintBrush(this.NextTimerComboBox, this.Theme.SecondaryHintBrush);
             this.TimeExpiredLabel.Foreground = this.Theme.SecondaryTextBrush;
 
             foreach (Button button in this.ButtonPanel.GetAllVisualChildren().OfType<Button>())
@@ -1736,6 +1843,10 @@ namespace Hourglass.Windows
             // Set the copy state to saved, add it to the TimerManager list
             savedTimer.Save();
             TimerManager.Instance.Add(savedTimer);
+            
+            // Refresh Next Timer ComboBox values here
+            this.PopulateNextTimerComboBox();
+
             this.SaveButton.Unfocus();
         }
 
@@ -2075,14 +2186,25 @@ namespace Hourglass.Windows
 
         #endregion
 
-        private void NextTimerTextBoxPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// Invoked when the <see cref="NextTimerComboBox"/> content changes.
+        /// </summary>
+        /// <param name="sender">The <see cref="NextTimerComboBox"/>.</param>
+        /// <param name="e">The event data.</param>
+        private void NextTimerComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            TimerTitleRepresentation SelectedValue = (TimerTitleRepresentation)(this.NextTimerComboBox.SelectedValue);
+            this.Timer.Options.NextTimerTitle = SelectedValue.Value;
         }
 
-        private void NextTimerTextBoxPreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        /// <summary>
+        /// Invoked when the <see cref="NextTimerComboBox"/> drop down is opened.  Populates the current list of saved timers that can be selected.
+        /// </summary>
+        /// <param name="sender">The <see cref="NextTimerComboBox"/>.</param>
+        /// <param name="e">The event data.</param>
+        private void NextTimerComboBoxDropDownOpened(object sender, System.EventArgs e)
         {
-
+            this.PopulateNextTimerComboBox();
         }
     }
 }

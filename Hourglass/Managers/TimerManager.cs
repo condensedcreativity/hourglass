@@ -110,6 +110,17 @@ namespace Hourglass.Managers
                 throw new InvalidOperationException();
             }
 
+            if (timer.State == TimerState.Saved)
+            {
+                foreach (Timer currentTimer in this.SavedTimers)
+                {
+                    if (currentTimer.Options.Title.Equals(timer.Options.Title))
+                    {
+                        this.timers.Remove(currentTimer);
+                    }
+                }
+            }
+
             timer.Expired += this.TimerExpired;
             this.timers.Insert(0, timer);
         }
@@ -196,8 +207,9 @@ namespace Hourglass.Managers
                 {
                     TimerWindow window = new TimerWindow();
                     Timer nextTimer = new Timing.Timer(availableTimer.ToTimerInfo());
-                    this.Add(nextTimer);
+                    // Start the timer before adding it to the collection to keep the Saved timer from being deleted
                     nextTimer.Start(nextTimer.TimerStart);
+                    this.Add(nextTimer);                    
                     window.Show(nextTimer);
                     break;
                 }

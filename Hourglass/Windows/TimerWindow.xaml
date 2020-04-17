@@ -236,7 +236,18 @@
                                         PreviewMouseDown="TimerTextBoxPreviewMouseDown"
                                         PreviewGotKeyboardFocus="TimerTextBoxPreviewGotKeyboardFocus"
                                         TextAlignment="Center"/>
-                <local:SizeToFitTextBox x:Name="NextTimerTextBox"
+                <ComboBox x:Name="NextTimerComboBox"
+                          SelectionChanged="NextTimerComboBoxSelectionChanged"
+                          DropDownOpened="NextTimerComboBoxDropDownOpened">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding Text}" 
+                                        FontFamily="Segoe UI Light, Segoe UI"
+                                        Margin="0 1 0 4"
+                                        FontSize="10"
+                                        TextAlignment="Center"/>
+<!--                        nwm replace TextBlock above with a SizeToFitTextBlock similar to the SizeToFitTextBox defined below.    
+                            <local:SizeToFitTextBox x:Name="NextTimerTextBox"
                                         Background="{x:Null}"
                                         BorderBrush="{x:Null}"
                                         FontFamily="Segoe UI Light, Segoe UI"
@@ -246,6 +257,11 @@
                                         PreviewMouseDown="NextTimerTextBoxPreviewMouseDown"
                                         PreviewGotKeyboardFocus="NextTimerTextBoxPreviewGotKeyboardFocus"
                                         TextAlignment="Center"/>
+-->
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
 
                 <Grid>
                     <Label x:Name="TimeExpiredLabel"

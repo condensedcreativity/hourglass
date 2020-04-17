@@ -1029,6 +1029,7 @@ namespace Hourglass.Windows
             Timer savedTimer = (Timer)menuItem.Tag;
             Timer newTimer = new Timer(savedTimer.ToTimerInfo());
             newTimer.Start(newTimer.TimerStart);
+            newTimer.Pause();
             TimerManager.Instance.Add(newTimer);
             this.ShowTimer(newTimer);
         }

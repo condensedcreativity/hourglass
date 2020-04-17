@@ -198,6 +198,10 @@ namespace Hourglass.Timing
             get { return true; }
         }
 
+        public string Title
+        {
+            get { return this.Options.Title; }
+        }
         #endregion
 
         #region Static Methods
