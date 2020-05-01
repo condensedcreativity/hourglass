@@ -48,6 +48,11 @@ namespace Hourglass.Windows
         private const double BaseFontSize = 12;
 
         /// <summary>
+        /// The default font size used to render combo box controls in the <see cref="timerWindow"/>.
+        /// </summary>
+        private const double ComboBoxBaseFontSize = 10;
+
+        /// <summary>
         /// The default font size of the larger text control on the <see cref="timerWindow"/>.
         /// </summary>
         private const double BasePrimaryTextControlFontSize = 18;
@@ -121,6 +126,11 @@ namespace Hourglass.Windows
         private SizeToFitTextBox titleTextBox;
 
         /// <summary>
+        /// The combo selector <see cref="TextBlock"/> on the <see cref="timerWindow"/> used to display the next timer that will be launched when this timer expires.
+        /// </summary>
+        private ComboBox nextTimerComboBox;
+
+        /// <summary>
         /// The <see cref="Border"/> that animates to notify the user that the timer has expired or that the input was
         /// invalid.
         /// </summary>
@@ -160,6 +170,8 @@ namespace Hourglass.Windows
             this.innerGrid = this.timerWindow.InnerGrid;
             this.controlsPanel = this.timerWindow.ControlsPanel;
             this.timerTextBox = this.timerWindow.TimerTextBox;
+            this.nextTimerComboBox = this.timerWindow.NextTimerComboBox;
+
             this.titleTextBox = this.timerWindow.TitleTextBox;
             this.innerNotificationBorder = this.timerWindow.InnerNotificationBorder;
             this.buttons = new[]
@@ -180,6 +192,7 @@ namespace Hourglass.Windows
             this.timerWindow.SizeChanged += (s, e) => this.Scale();
             this.timerWindow.PropertyChanged += (s, e) => this.Scale();
             this.timerTextBox.TextChanged += (s, e) => this.Scale();
+            this.nextTimerComboBox.SelectionChanged += (s, e) => this.Scale();
         }
 
         /// <summary>
@@ -235,6 +248,8 @@ namespace Hourglass.Windows
                 bottom: (baseScaleFactor * BasePrimaryTextControlBottomMargin) + ((baseScaleFactor - 1.0) * BasePrimaryTextControlAdditionalMargin));
 
             this.titleTextBox.MaxFontSize = reducedScaleFactor * BaseFontSize;
+
+            this.nextTimerComboBox.FontSize = reducedScaleFactor * ComboBoxBaseFontSize;
 
             this.innerNotificationBorder.BorderThickness = new Thickness(reducedScaleFactor * BaseBorderThickness);
             this.innerNotificationBorder.Margin = new Thickness(reducedScaleFactor * BaseBorderMargin);
