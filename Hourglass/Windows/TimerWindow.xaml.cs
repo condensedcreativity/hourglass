@@ -106,6 +106,12 @@ namespace Hourglass.Windows
             }
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            string combinedData = this.Value + this.Text;
+            return combinedData.GetHashCode();
+        }
     }
 
     /// <summary>

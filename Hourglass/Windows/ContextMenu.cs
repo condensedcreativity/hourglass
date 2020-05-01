@@ -113,13 +113,15 @@ namespace Hourglass.Windows
 
         /// <summary>
         /// The "Open all saved timers" <see cref="MenuItem"/>.
+        /// TODO Add ability to open all saved timers, assuming need is ever found for this feature
         /// </summary>
-        private MenuItem openAllSavedTimersMenuItem;
+//        private MenuItem openAllSavedTimersMenuItem;
 
         /// <summary>
         /// The "Clear saved timers" <see cref="MenuItem"/>.
+        /// TODO Add ability to delete all saved timers, assuming need is ever found for this feature
         /// </summary>
-        private MenuItem clearSavedTimersMenuItem;
+//        private MenuItem clearSavedTimersMenuItem;
 
         /// <summary>
         /// The "Theme" <see cref="MenuItem"/>.
